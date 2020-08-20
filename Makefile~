@@ -1,0 +1,2 @@
+staticarray:
+	gcc -Wall -Pedantic-errors -ansi staticarray.c -o staticarray
