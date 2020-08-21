@@ -3,7 +3,7 @@
 #define CLEARKEY 0
 
 /* Here are my implementations of dynamic array functions such as append, extend, remove, insert and pop. 
- * This file also includes methods from the static array file. This time, they are implemented regarding the struct dynamicArray. */
+ * This code also includes methods used for static arrays. This time, they are implemented for dynamic arrays. */
 
 typedef struct dynamicArray
 {
@@ -11,7 +11,7 @@ typedef struct dynamicArray
 	int arraylen;
 } dynamicArray;
 
-
+/* Functions common with both static and dynamic arrays */
 void clear (dynamicArray*);
 dynamicArray *copy(dynamicArray*);
 int count(dynamicArray*, int);
@@ -20,7 +20,7 @@ void reverse(dynamicArray*);
 void sort(dynamicArray *);
 void quicksort(int *, int, int);
 
-void print_array(int *, int);
+/* Functions unique to dynamic arrays */
 void append(dynamicArray*, int);
 void extend(dynamicArray*, dynamicArray*);
 void remove_elem(dynamicArray*, int);
@@ -28,16 +28,6 @@ void insert(dynamicArray*, int, int);
 int pop(dynamicArray*);
 dynamicArray form_array(int);
 void print_dynamic_array(dynamicArray);
-
-void print_array(int *array, int arraylen)
-{
-	int i;
-	for (i = 0; i < arraylen; i++)
-	{
-		printf("%d ", array[i]);
-	}
-	printf("\n");
-}
 
 void print_dynamic_array(dynamicArray dynamicArray)
 {
