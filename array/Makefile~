@@ -1,2 +1,2 @@
 staticarray:
-	gcc -Wall -Pedantic-errors -ansi staticarray.c -o staticarray
+	gcc -Wall -pedantic-errors -ansi staticarray.c -o staticarray
