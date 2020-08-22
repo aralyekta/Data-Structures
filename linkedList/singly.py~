@@ -1,5 +1,5 @@
 # Our methods are:
-# Count, index, insert, remove, append, pop, print
+# Count, index, insert, remove, append, pop, print, delete
 
 class Node:
     def __init__(self, data):
@@ -70,21 +70,21 @@ class linkedList:
         return -1
 
     def insert(self, index, data):
-        if index < 0:
+        if index < 0: # Checks if index is valid
             print("Index must be 0 or positive.")
             return
-        if not self.head:
+        if not self.head: # Checks if the linked list is empty
             self.append(data)
             return
-        if index == 0:
+        if index == 0: # Case1: Insert at head
             nodeToAdd = Node(data)
             nodeToAdd.ptr = self.head
             self.head = nodeToAdd
             self.length += 1
-        elif index < self.length:
-            if self.head == self.tail:
+        elif index < self.length: # Case2: Insert in the middle
+            if self.head == self.tail: #Checks if the linked list has 1 element, if that is the case, append the element.
                 self.append(data)
-            else:
+            else: # If the linked list is larger than one element, perform the insertion
                 i = 1
                 ptrToIncrement = self.head
                 while i < index:
@@ -95,8 +95,61 @@ class linkedList:
                 ptrToIncrement.ptr = nodeToAdd
                 nodeToAdd.ptr = ptrSecond
                 self.length += 1
-        else:
+        else: # If the index is bigger than the current length, append
             self.append(data)
+    
+    def remove(self, data):
+        if self.length == 0:
+            print("Linked list doesn't have any elements")
+            return
+        if self.length == 1:
+            if data == self.head.data:
+                self.pop()
+                return
+            else:
+                print("The element doesn't exist in the linked list")
+                return
+        else:
+            ptrToIncrement = self.head
+            if ptrToIncrement.data == data:
+                self.head = self.head.ptr
+                self.length -= 1
+                return
+            while ptrToIncrement.ptr and ptrToIncrement.ptr.data != data:
+                ptrToIncrement = ptrToIncrement.ptr
+            if ptrToIncrement is self.tail:
+                print("The element doesn't exist in the linked list")
+                return
+            elif ptrToIncrement.ptr is self.tail:
+                self.pop()
+                return
+            else:
+                ptrToIncrement.ptr = ptrToIncrement.ptr.ptr
+                self.length -= 1
+                return
+    
+    def delete(self, index):
+        if index < 0:
+            print("Index should be 0 or positive")
+            return
+        elif index == 0:
+            self.head = self.head.ptr
+            self.length -= 1
+            return
+        elif index == self.length-1:
+            self.pop()
+            return
+        elif index >= self.length:
+            print("Index is out of bounds")
+            return
+        else:
+            counter = 1
+            ptrToIncrement = self.head
+            while counter < index:
+                ptrToIncrement = ptrToIncrement.ptr
+                counter += 1
+            ptrToIncrement.ptr = ptrToIncrement.ptr.ptr
+            self.length -= 1
 
 test = linkedList()
 for i in range(5):
