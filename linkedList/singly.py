@@ -36,18 +36,16 @@ class linkedList: #The class for the linked list
         if not self.head:
             print("Linked list doesn't have any elements")
             return None
+        valToReturn = self.tail.data
         if self.head is self.tail: #Check if the linked list has only one node
-            valToReturn = self.head.data
             self.head = None
             self.tail = None
-            return valToReturn
-        #If not, do the regular pop operation
-        ptrToIncrement = self.head
-        valToReturn = self.tail.data
-        while (ptrToIncrement.ptr is not self.tail): #Find the (n-1)th node
-            ptrToIncrement = ptrToIncrement.ptr
-        self.tail = ptrToIncrement
-        ptrToIncrement.ptr = None
+        else: #If not, do the regular pop operation
+            ptrToIncrement = self.head
+            while (ptrToIncrement.ptr is not self.tail): #Find the (n-1)th node
+                ptrToIncrement = ptrToIncrement.ptr
+            self.tail = ptrToIncrement
+            ptrToIncrement.ptr = None
         self.length -= 1
         return valToReturn
 
