@@ -75,10 +75,10 @@ class linkedList: #The class for the linked list
         if index < 0:
             print("Index must be 0 or positive")
             return
-        if self.length == 0:
+        elif self.length == 0:
             self.append(data)
             return
-        if index == 0:
+        elif index == 0:
             nodeToAdd = Node(data)
             self.head.previous = nodeToAdd
             nodeToAdd.next = self.head
@@ -104,7 +104,7 @@ class linkedList: #The class for the linked list
                 self.length += 1
             else: #Backward
                 print("Going backward")
-                i = self.length-2
+                i = self.length-1
                 ptrToDecrement = self.tail
                 while i > index:
                     ptrToDecrement = ptrToDecrement.previous
@@ -117,6 +117,80 @@ class linkedList: #The class for the linked list
                 nodeToAdd.previous = ptrSecond
                 self.length += 1
 
+    def remove(self, data):
+        if self.length == 0:
+            print("The linked list doesn't have any elements")
+            return
+        elif self.length == 1:
+            if self.head.data == data:
+                self.pop()
+                return
+            else:
+                print("The value doesn't exist in the linked list")
+                return
+        ptrToIncrement = self.head
+        while ptrToIncrement and ptrToIncrement.data != data:
+            ptrToIncrement = ptrToIncrement.next
+        if not ptrToIncrement:
+            print("The value doesn't exist in the linked list")
+        elif ptrToIncrement is self.head:
+            self.head = ptrToIncrement.next
+            ptrToIncrement.next = None
+            self.head.previous = None
+            self.length -= 1
+        elif ptrToIncrement is self.tail:
+            self.tail = ptrToIncrement.previous
+            self.tail.next = None
+            ptrToIncrement.previous = None
+            self.length -= 1
+        else:
+            ptr1 = ptrToIncrement.previous
+            ptr2 = ptrToIncrement.next
+            ptrToIncrement.next = None
+            ptrToIncrement.previous = None
+            ptr1.next = ptr2
+            ptr2.previous = ptr1
+            self.length -= 1
+        return
+
+    def delete(self, index):
+        if index < 0:
+            print("Index should be 0 or positive")
+        elif index == 0:
+            self.remove(0)
+        elif index >= self.length:
+            print("Index is out of bounds")
+        elif index == self.length-1:
+            self.pop()
+        else:
+            if index < self.length//2:
+                print("Forward")
+                i = 0
+                ptrToIncrement = self.head
+                while i < index:
+                    ptrToIncrement = ptrToIncrement.next
+                    i += 1
+                ptr1 = ptrToIncrement.previous
+                ptr2 = ptrToIncrement.next
+                ptrToIncrement.previous = None
+                ptrToIncrement.next = None
+                ptr1.next = ptr2
+                ptr2.previous = ptr1
+                self.length -= 1
+            else:
+                print("Backward")
+                i = self.length-1
+                ptrToDecrement = self.tail
+                while i > index:
+                    ptrToDecrement = ptrToDecrement.previous
+                    i -= 1
+                ptr1 = ptrToDecrement.previous
+                ptr2 = ptrToDecrement.next
+                ptrToDecrement.next = None
+                ptrToDecrement.previous = None
+                ptr1.next = ptr2
+                ptr2.previous = ptr1
+                self.length -= 1
 
 test1 = linkedList()
 test2 = linkedList()
