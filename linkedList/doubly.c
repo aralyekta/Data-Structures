@@ -8,7 +8,7 @@
 #define PREV(nodePtr) (nodePtr)->previous
 
 /* Our functions are
- * print, append, pop, count, index, insert, remove, delete */
+ * print, append, pop, count, index, insert, remove, delete, clear, contains, peekfirst, peeklast */
 
 /* Structs used below */
 
@@ -39,6 +39,10 @@ int index(linkedList *, int);
 void insert(linkedList *, int, int);
 void removeNode(linkedList *, int);
 void delete(linkedList *, int);
+void clear(linkedList *);
+int contains(linkedList *, int);
+int peekFirst(linkedList *);
+int peekLast(linkedList *);
 
 node *createNode(int data)
 {
@@ -331,6 +335,37 @@ void delete(linkedList *linkedListo, int index)
 	}
 }
 
+void clear(linkedList *linkedListo) /* Clears all of the nodes of a linked list */
+{
+	while (LEN(linkedListo) > 0)
+	{
+		pop(linkedListo);
+	}
+}
+
+int contains(linkedList *linkedListo, int data)
+{
+	int indexFound = index(linkedListo, data);
+	if (indexFound != -1)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int peekLast(linkedList *linkedListo) /* Returns the last node of the linked list */
+{
+	return DATA(TAIL(linkedListo));
+}
+
+int peekFirst(linkedList *linkedListo) /* Returns the first node of the linked list */
+{
+	return DATA(HEAD(linkedListo));
+}
+
 int main()
 {
 	linkedList *linkedListo;
@@ -351,12 +386,7 @@ int main()
 	append(linkedListo, 300);
 	insert(linkedListo, 3, 200);
 	printLinkedList(linkedListo);
-	delete(linkedListo, 0);
-	delete(linkedListo, 1);
-	delete(linkedListo, 1);
-	printLinkedList(linkedListo);
-	pop(linkedListo);
-	pop(linkedListo);
+	clear(linkedListo);
 	free(linkedListo);
 	/* Don't forget to free the existing linked lists
 	 * Also, don't forget to remove all of the nodes to free the mallocs required for them */

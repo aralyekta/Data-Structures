@@ -7,7 +7,7 @@
 #define NEXT(NodePtr) (NodePtr)->next
 
 /* Our functions are
- * print, append, count, index, insert, remove, pop, delete */
+ * print, append, count, index, insert, remove, pop, delete, clear, contains, peekfirst, peeklast */
 
 /* Structs used below */
 
@@ -38,6 +38,10 @@ int index(linkedList *, int);
 void insert(linkedList *, int, int);
 void removeNode(linkedList *, int);
 void delete(linkedList *, int);
+void clear(linkedList *);
+int contains(linkedList *, int);
+int peekFirst(linkedList *);
+int peekLast(linkedList *);
 
 Node *createNode(int data)
 {
@@ -83,7 +87,7 @@ void append(linkedList *linkedListo, int data)
 		nodeToAdd = createNode(data);
 		HEAD(linkedListo) = nodeToAdd;
 		TAIL(linkedListo) = nodeToAdd;
-		LEN(linkedListo) = 1;
+		LEN(linkedListo)++;
 	}
 	else
 	{
@@ -272,7 +276,6 @@ void delete(linkedList *linkedListo, int index)
 	}
 	else /* The linked list has multiple nodes */
 	{
-		
 		if (index < 0) /* Check for erroneous input, this case index is way below the bounds */
 		{
 			printf("Index should be 0 or positive\n");
@@ -306,6 +309,37 @@ void delete(linkedList *linkedListo, int index)
 	}
 }
 
+void clear(linkedList *linkedListo)
+{
+	while (LEN(linkedListo) > 0)
+	{
+		pop(linkedListo);
+	}
+}
+
+int contains(linkedList *linkedListo, int data)
+{
+	int indexFound = index(linkedListo, data);
+	if (indexFound != -1)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int peekLast(linkedList *linkedListo)
+{
+	return DATA(TAIL(linkedListo));
+}
+
+int peekFirst(linkedList *linkedListo)
+{
+	return DATA(HEAD(linkedListo));
+}
+
 int main()
 {
 	int i;
@@ -318,23 +352,8 @@ int main()
 	{
 		append(linkedListo, 10*i);
 	}
-	printLinkedList(linkedListo);
-	delete(linkedListo, 0);
-	printLinkedList(linkedListo);
-	delete(linkedListo, 3);
-	printLinkedList(linkedListo);
-	removeNode(linkedListo, 0);
-	printLinkedList(linkedListo);
-	removeNode(linkedListo, 20);
-	printLinkedList(linkedListo);
-	removeNode(linkedListo, 40);
-	printLinkedList(linkedListo);
-	delete(linkedListo, 0);
-	printLinkedList(linkedListo);
-	append(linkedListo, 20);
-	printLinkedList(linkedListo);
-	pop(linkedListo);
-	printLinkedList(linkedListo);
+	printf("%d %d %d\n", contains(linkedListo, 10), peekFirst(linkedListo), peekLast(linkedListo));
+	clear(linkedListo);
 	free(linkedListo); 
 	/* Don't forget to free the linked list
 	 * Also don't forget to remove all of the elements from the linked list in order to free the memory from mallocs */

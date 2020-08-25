@@ -1,5 +1,5 @@
 # Our methods are:
-# Count, index, insert, remove, append, pop, print, delete
+# Count, index, insert, remove, append, pop, print, delete, clear, contains, peeklast, peekfirst
 
 class Node: #The class for a node of the linked list
     def __init__(self, data):
@@ -11,6 +11,17 @@ class linkedList: #The class for the linked list
         self.head = None
         self.tail = None
         self.length = 0
+
+    def clear(self):
+        while self.length > 0:
+            self.pop()
+
+    def contains(self, data):
+        indexVal = self.index(data)
+        if indexVal != -1:
+            return 1
+        else:
+            return 0
 
     def append(self, data):
         nodeToAppend = Node(data)
@@ -40,14 +51,12 @@ class linkedList: #The class for the linked list
         if self.head is self.tail: #Check if the linked list has only one node
             self.head = None
             self.tail = None
-            self.length -= 1
-            return valToReturn
-        #If not, do the regular pop operation
-        ptrToIncrement = self.head
-        while (ptrToIncrement.ptr is not self.tail): #Find the (n-1)th node
-            ptrToIncrement = ptrToIncrement.ptr
-        self.tail = ptrToIncrement
-        ptrToIncrement.ptr = None
+        else: #If not, do the regular pop operation
+            ptrToIncrement = self.head
+            while (ptrToIncrement.ptr is not self.tail): #Find the (n-1)th node
+                ptrToIncrement = ptrToIncrement.ptr
+            self.tail = ptrToIncrement
+            ptrToIncrement.ptr = None
         self.length -= 1
         return valToReturn
 

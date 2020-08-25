@@ -1,0 +1,48 @@
+#include "singly.h"
+
+/* We will be using singly linked lists for queue, all of the functions can be found in the linked list folder */
+/* All of the functions included in the singly.h file can be used here
+ * append, pop, count, index, contains, clear, peekfirst, peeklast, remove, insert, delete, print */
+
+void enqueue(linkedList *, int);
+int dequeue(linkedList *);
+int peek(linkedList *);
+linkedList *createQueue();
+void printQueue(linkedList *);
+
+linkedList *createQueue()
+{
+	return createLinkedList();
+}
+
+void enqueue(linkedList *linkedListo, int data)
+{
+	append(linkedListo, data);
+}
+
+int dequeue(linkedList *linkedListo)
+{
+	int returnVal = pop(linkedListo);
+	return returnVal;
+}
+
+int peek(linkedList *linkedListo)
+{
+	return peekFirst(linkedListo);
+}
+
+void printQueue(linkedList *linkedListo)
+{
+	printLinkedList(linkedListo);
+}
+
+int main()
+{
+	linkedList *queue = createQueue();
+	append(queue, 10);
+	printQueue(queue);
+	clear(queue);
+	printQueue(queue);
+	free(queue);
+	return 0;
+}

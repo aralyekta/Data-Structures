@@ -339,22 +339,3 @@ int peekFirst(linkedList *linkedListo) /* Returns the first node of the linked l
 {
 	return DATA(HEAD(linkedListo));
 }
-
-int main()
-{
-	int i;
-	linkedList *linkedListo;
-	linkedListo = createLinkedList();
-	append(linkedListo, 20);
-	pop(linkedListo);
-	append(linkedListo, 10);
-	for (i = 0; i < 5; i++)
-	{
-		append(linkedListo, 10*i);
-	}
-	clear(linkedListo);
-	free(linkedListo); 
-	/* Don't forget to free the linked list
-	 * Also don't forget to remove all of the elements from the linked list in order to free the memory from mallocs */
-	return 0;
-}

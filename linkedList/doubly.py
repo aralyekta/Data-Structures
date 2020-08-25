@@ -1,5 +1,5 @@
 # Our methods are:
-# Count, index, insert, remove, append, pop, print, delete
+# Count, index, insert, remove, append, pop, print, delete, clear, contains, peeklast, peekfirst
 
 class Node: #The class for a node of the linked list
     def __init__(self, data):
@@ -16,6 +16,23 @@ class linkedList: #The class for the linked list
     def test(self): #Print both the linked list and its length for testing
         self.print()
         print(self.length)
+
+    def clear(self):
+        while self.length > 0:
+            self.pop()
+
+    def contains(self, data):
+        indexVal = self.index(data)
+        if indexVal != -1:
+            return 1
+        else:
+            return 0
+
+    def peeklast(self):
+        return self.tail.data
+
+    def peekfirst(self):
+        return self.head.data
 
     def print(self):
         if not self.head:
