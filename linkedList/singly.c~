@@ -6,7 +6,7 @@
 #define DATA(NodePtr) (NodePtr)->data
 #define NEXT(NodePtr) (NodePtr)->next
 
-/* Our methods are
+/* Our functions are
  * print, append, count, index, insert, remove, pop, delete */
 
 /* Structs used below */
@@ -28,7 +28,6 @@ typedef struct linkedList
 
 /* Structs used above */
 
-void freeNode(Node *);
 linkedList *createLinkedList();
 void printLinkedList(linkedList *);
 void append(linkedList *, int);
@@ -63,7 +62,7 @@ void printLinkedList(linkedList *linkedListo)
 		printf("%d ", DATA(currentNode));
 		currentNode = NEXT(currentNode);
 	}
-	printf("\n%d\n", LEN(linkedListo));
+	printf("\n");
 }
 
 linkedList *createLinkedList()

@@ -126,30 +126,31 @@ class linkedList: #The class for the linked list
             else:
                 print("The value doesn't exist in the linked list")
                 return
-        ptrToIncrement = self.head
-        while ptrToIncrement and ptrToIncrement.data != data:
-            ptrToIncrement = ptrToIncrement.next
-        if not ptrToIncrement: #Case 1: The data doesn't exist in the linked list
-            print("The value doesn't exist in the linked list")
-        elif ptrToIncrement is self.head: #Case 2: The data is at the beginning of the linked list
-            self.head = ptrToIncrement.next
-            ptrToIncrement.next = None
-            self.head.previous = None
-            self.length -= 1
-        elif ptrToIncrement is self.tail: #Case 3: The data is at the end of the linked list
-            self.tail = ptrToIncrement.previous
-            self.tail.next = None
-            ptrToIncrement.previous = None
-            self.length -= 1
-        else: #Case 4: The data is in the middle of the linked list. Since we don't know its index, we should do a linear search
-            ptr1 = ptrToIncrement.previous
-            ptr2 = ptrToIncrement.next
-            ptrToIncrement.next = None
-            ptrToIncrement.previous = None
-            ptr1.next = ptr2
-            ptr2.previous = ptr1
-            self.length -= 1
-        return
+        else: #The case when the linked list has multiple nodes
+            ptrToIncrement = self.head
+            while ptrToIncrement and ptrToIncrement.data != data:
+                ptrToIncrement = ptrToIncrement.next
+            if not ptrToIncrement: #Case 1: The data doesn't exist in the linked list
+                print("The value doesn't exist in the linked list")
+            elif ptrToIncrement is self.head: #Case 2: The data is at the beginning of the linked list
+                self.head = ptrToIncrement.next
+                ptrToIncrement.next = None
+                self.head.previous = None
+                self.length -= 1
+            elif ptrToIncrement is self.tail: #Case 3: The data is at the end of the linked list
+                self.tail = ptrToIncrement.previous
+                self.tail.next = None
+                ptrToIncrement.previous = None
+                self.length -= 1
+            else: #Case 4: The data is in the middle of the linked list. Since we don't know its index, we should do a linear search
+                ptr1 = ptrToIncrement.previous
+                ptr2 = ptrToIncrement.next
+                ptrToIncrement.next = None
+                ptrToIncrement.previous = None
+                ptr1.next = ptr2
+                ptr2.previous = ptr1
+                self.length -= 1
+            return
 
     def delete(self, index):
         if index < 0: #Check for erroneous input

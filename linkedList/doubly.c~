@@ -3,35 +3,36 @@
 #define LEN(linkedListPtr) (linkedListPtr)->length
 #define HEAD(linkedListPtr) (linkedListPtr)->head
 #define TAIL(linkedListPtr) (linkedListPtr)->tail
-#define DATA(NodePtr) (NodePtr)->data
-#define NEXT(NodePtr) (NodePtr)->next
+#define DATA(nodePtr) (nodePtr)->data
+#define NEXT(nodePtr) (nodePtr)->next
+#define PREV(nodePtr) (nodePtr)->previous
 
 /* Our functions are
- * print, append, count, index, insert, remove, pop, delete */
+ * print, append, pop, count, index, insert, remove, delete */
 
 /* Structs used below */
 
 /* Struct for a node */
-typedef struct Node
+typedef struct node
 {
 	int data;
-	struct Node *next;
-} Node;
+	struct node* next, *previous;
+} node;
 
 /* Struct for the linked list */
 typedef struct linkedList
 {
-	Node *head;
-	Node *tail;
+	node *head, *tail;
 	int length;
 } linkedList;
 
 /* Structs used above */
 
+node *createNode(int); 
 linkedList *createLinkedList();
+void freeNode(node *);
 void printLinkedList(linkedList *);
-void append(linkedList *, int);
-Node *createNode(int);
+void append(linkedList *, int); 
 int pop(linkedList *);
 int count(linkedList *, int);
 int index(linkedList *, int);
@@ -39,30 +40,13 @@ void insert(linkedList *, int, int);
 void removeNode(linkedList *, int);
 void delete(linkedList *, int);
 
-Node *createNode(int data)
+node *createNode(int data)
 {
-	Node *nodePtr = malloc(sizeof(Node)); /* Don't forget to free this malloc when removing or deleting nodes */
+	node *nodePtr = malloc(sizeof(node)); /* Don't forget to free th    is malloc when removing or deleting nodes */
 	DATA(nodePtr) = data;
 	NEXT(nodePtr) = NULL;
+	PREV(nodePtr) = NULL;
 	return nodePtr;
-}
-
-void printLinkedList(linkedList *linkedListo)
-{
-	int i, len = LEN(linkedListo);
-	Node *currentNode = HEAD(linkedListo);
-	if (len == 0)
-	{
-		printf("The linked list doesn't have any elements\n");
-		return;
-	}
-	for (i = 0; i < len; i++)
-	{
-		/* Print all elements iteratively and move the pointer forward */
-		printf("%d ", DATA(currentNode));
-		currentNode = NEXT(currentNode);
-	}
-	printf("\n");
 }
 
 linkedList *createLinkedList()
@@ -74,12 +58,32 @@ linkedList *createLinkedList()
 	return linkedListo;
 }
 
+void printLinkedList(linkedList *linkedListo)
+{
+	int i, len = LEN(linkedListo);
+	node *currentNode = HEAD(linkedListo);
+	if (len == 0)
+	{
+		printf("The linked list doesn't have any elements\n");
+	}
+	else
+	{
+		for (i = 0; i < len; i++)
+		{
+			/* Print all elements iteratively and move the pointer forward */
+			printf("%d ", DATA(currentNode));
+			currentNode = NEXT(currentNode);
+		}
+		printf("\n%d\n", LEN(linkedListo));
+	}
+}
+
 void append(linkedList *linkedListo, int data)
 {
-	Node *nodeToAdd;
+	node *nodeToAdd;
 	if (LEN(linkedListo) == 0)
 	{
-		/* If the linked list is empty, simply set the head and the tail pointers to the new node */
+		/* If the linked list is empty, simply set the head and the tail poi    nters to the new node */
 		nodeToAdd = createNode(data);
 		HEAD(linkedListo) = nodeToAdd;
 		TAIL(linkedListo) = nodeToAdd;
@@ -87,51 +91,50 @@ void append(linkedList *linkedListo, int data)
 	}
 	else
 	{
-		/* If the linked list already has nodes, set the tail's next to it and set the tail to it */
+		/* If the linked list already has nodes, set the tail's next to it a    nd set the tail to it */
 		nodeToAdd = createNode(data);
 		NEXT(TAIL(linkedListo)) = nodeToAdd;
+		PREV(nodeToAdd) = TAIL(linkedListo);
 		TAIL(linkedListo) = nodeToAdd;
 		LEN(linkedListo)++;
 	}
 }
 
-
 int pop(linkedList *linkedListo)
 {
-	int val, i, len = LEN(linkedListo);
-	Node *nodePtr;
-	if (len == 0) /* Check if the linked list is empty */
+	int len = LEN(linkedListo), valToReturn;
+	node *nodePtr;
+	if (len == 0)
 	{
 		printf("The linked list doesn't have any elements\n");
 		return -1;
 	}
-	else if (len == 1)
-	{ /* The case when the linked list has only one node */
-		val = DATA(TAIL(linkedListo));
-		free(HEAD(linkedListo));
-		HEAD(linkedListo) = NULL;
-		TAIL(linkedListo) = NULL;
-		LEN(linkedListo)--;
-		return val;
-	}
 	else
-	{ /* The regular case, the linked list has multiple nodes */
-		val = DATA(TAIL(linkedListo));
-		nodePtr = HEAD(linkedListo);
-		for (i = 1; i < len-1; i++, nodePtr = NEXT(nodePtr));
-		TAIL(linkedListo) = nodePtr;
-		nodePtr = NEXT(nodePtr);
-		NEXT(TAIL(linkedListo)) = NULL;
-		free(nodePtr);
-		LEN(linkedListo)--;
-		return val;
+	{
+		valToReturn = DATA(TAIL(linkedListo));
+		if (len == 1)
+		{
+			free(HEAD(linkedListo));
+			HEAD(linkedListo) = NULL;
+			TAIL(linkedListo) = NULL;
+			LEN(linkedListo)--;
+		}
+		else
+		{
+			nodePtr = PREV(TAIL(linkedListo));
+			NEXT(nodePtr) = NULL;
+			free(TAIL(linkedListo));
+			TAIL(linkedListo) = nodePtr;
+			LEN(linkedListo)--;
+		}
+		return valToReturn;
 	}
 }
 
 int count(linkedList *linkedListo, int data)
 {
 	int counter = 0, i, len = LEN(linkedListo);
-	Node *nodePtr = HEAD(linkedListo);
+	node *nodePtr = HEAD(linkedListo);
 	for (i = 0; i < len; i++)
 	{
 		/* Move iteratively and increment the counter when searched data is found */
@@ -147,7 +150,7 @@ int count(linkedList *linkedListo, int data)
 int index(linkedList *linkedListo, int data)
 {
 	int index = -1, i, len = LEN(linkedListo);
-	Node *nodePtr = HEAD(linkedListo);
+	node *nodePtr = HEAD(linkedListo);
 	for (i = 0; i < len; i++)
 	{
 		/* Move iteratively and return the index when searched data is found */
@@ -163,7 +166,7 @@ int index(linkedList *linkedListo, int data)
 
 void insert(linkedList *linkedListo, int index, int data)
 {
-	Node *nodePtr, *nodeToAdd;
+	node *nodePtr, *nodeToAdd, *nodePtr2;
 	int len = LEN(linkedListo), i;
 	if (index < 0) /* Check for erroneous input */
 	{
@@ -177,6 +180,7 @@ void insert(linkedList *linkedListo, int index, int data)
 	{
 		nodeToAdd = createNode(data);
 		NEXT(nodeToAdd) = HEAD(linkedListo);
+		PREV(HEAD(linkedListo)) = nodeToAdd;
 		HEAD(linkedListo) = nodeToAdd;
 		LEN(linkedListo)++;
 	}
@@ -186,19 +190,37 @@ void insert(linkedList *linkedListo, int index, int data)
 	}
 	else /* Index to insert is between the first and the last node (not included), and the linked list has multiple nodes (because the last 2 cases handle all of the linked lists with one node)*/
 	{
-		nodePtr = HEAD(linkedListo);
-		for (i = 1; i < index; i++, nodePtr = NEXT(nodePtr));
-		nodeToAdd = createNode(data);
-		NEXT(nodeToAdd) = NEXT(nodePtr);
-		NEXT(nodePtr) = nodeToAdd;
-		LEN(linkedListo)++;
+		if (index <= len/2)
+		{
+			nodePtr = HEAD(linkedListo);
+			for (i = 1; i < index; i++, nodePtr = NEXT(nodePtr));
+			nodePtr2 = NEXT(nodePtr);
+			nodeToAdd = createNode(data);
+			NEXT(nodePtr) = nodeToAdd;
+			PREV(nodeToAdd) = nodePtr;
+			NEXT(nodeToAdd) = nodePtr2;
+			PREV(nodePtr2) = nodeToAdd;
+			LEN(linkedListo)++;
+		}
+		else
+		{
+			nodePtr = TAIL(linkedListo);
+			for (i = len-1; i > index; i--, nodePtr = PREV(nodePtr));
+			nodePtr2 = PREV(nodePtr);
+			nodeToAdd = createNode(data);
+			PREV(nodePtr) = nodeToAdd;
+			NEXT(nodeToAdd) = nodePtr;
+			PREV(nodeToAdd) = nodePtr2;
+			NEXT(nodePtr2) = nodeToAdd;
+			LEN(linkedListo)++;
+		}
 	}
 }
 
 void removeNode(linkedList *linkedListo, int data)
 {
 	int len = LEN(linkedListo);
-	Node *nodePtr, *nodePtr2;
+	node *nodePtr, *nodePtr2;
 	if (len == 0)
 	{
 		/* Check if the linked list is empty */
@@ -221,39 +243,34 @@ void removeNode(linkedList *linkedListo, int data)
 	else /* Linked list has multiple nodes */
 	{
 		nodePtr = HEAD(linkedListo);
-		if (DATA(nodePtr) == data) /* Check if the value to be removed is in the first node */
+		while (nodePtr && DATA(nodePtr) != data) /* Move iteratively until finding the value */
 		{
-			HEAD(linkedListo) = NEXT(nodePtr);
-			NEXT(nodePtr) = NULL;
+			nodePtr = NEXT(nodePtr);
+		}
+		if (nodePtr == HEAD(linkedListo)) /* Case1: The data is at the beginning of the linked list */
+		{
+			nodePtr2 = NEXT(nodePtr);
+			PREV(nodePtr2) = NULL;
 			free(nodePtr);
+			HEAD(linkedListo) = nodePtr2;
 			LEN(linkedListo)--;
 		}
-		else /* The value to be removed could be in the next nodes */
+		else if (nodePtr == TAIL(linkedListo)) /* Case2: The data is at the end of the linked list */
 		{
-			while (NEXT(nodePtr) && DATA(NEXT(nodePtr)) != data) /* Move iteratively until finding the value */
-			{
-				nodePtr = NEXT(nodePtr);
-			}
-			if (nodePtr == TAIL(linkedListo)) /* If we moved all the way to the last element, the value to be removed doesn't exist in the linked list */
-			{
-				printf("The element doesn't exist in the linked list\n");
-			}
-			else if (NEXT(nodePtr) == TAIL(linkedListo)) /* If the moved all the way to the previous node of the tail, the value to be removed is in the tail node */
-			{
-				nodePtr2 = TAIL(linkedListo);
-				NEXT(nodePtr) = NULL;
-				TAIL(linkedListo) = nodePtr;
-				free(nodePtr2);
-				LEN(linkedListo)--;
-			}
-			else /* All other cases where we found the value in the middle nodes */
-			{
-				nodePtr2 = NEXT(nodePtr);
-				NEXT(nodePtr) = NEXT(nodePtr2);
-				NEXT(nodePtr2) = NULL;
-				free(nodePtr2);
-				LEN(linkedListo)--;
-			}
+			nodePtr2 = PREV(nodePtr);
+			NEXT(nodePtr2) = NULL;
+			free(nodePtr);
+			TAIL(linkedListo) = nodePtr2;
+			LEN(linkedListo)--;
+		}
+		else /* Case3: The data is in the middle of the linked list. */
+		{
+			nodePtr = PREV(nodePtr);
+			nodePtr2 = NEXT(NEXT(nodePtr));
+			free(NEXT(nodePtr));
+			LEN(linkedListo)--;
+			NEXT(nodePtr) = nodePtr2;
+			PREV(nodePtr2) = nodePtr;
 		}
 	}
 }
@@ -261,7 +278,7 @@ void removeNode(linkedList *linkedListo, int data)
 void delete(linkedList *linkedListo, int index)
 {
 	int len = LEN(linkedListo), i;
-	Node *nodePtr, *nodePtr2;
+	node *nodePtr, *nodePtr2;
 	if (len == 0) /* Check if the linked list is empty */
 	{
 		printf("The linked list doesn't have any elements\n");
@@ -294,12 +311,22 @@ void delete(linkedList *linkedListo, int index)
 		}
 		else /* Removal index is in the middle of the linked list */
 		{
-			nodePtr = HEAD(linkedListo);
-			for (i = 1; i < index; i++, nodePtr = NEXT(nodePtr));
-			nodePtr2 = NEXT(nodePtr);
-			NEXT(nodePtr) = NEXT(nodePtr2);
-			NEXT(nodePtr2) = NULL;
-			free(nodePtr2);
+			if (index < len/2)
+			{
+				nodePtr = HEAD(linkedListo);
+				for (i = 0; i < index; i++, nodePtr = NEXT(nodePtr));
+
+			}
+			else
+			{
+				nodePtr = TAIL(linkedListo);
+				for (i = len-1; i > index; i--, nodePtr = PREV(nodePtr));
+			}
+			nodePtr = PREV(nodePtr);
+			nodePtr2 = NEXT(NEXT(nodePtr));
+			free(NEXT(nodePtr));
+			NEXT(nodePtr) = nodePtr2;
+			PREV(nodePtr2) = nodePtr;
 			LEN(linkedListo)--;
 		}
 	}
@@ -307,35 +334,28 @@ void delete(linkedList *linkedListo, int index)
 
 int main()
 {
-	int i;
 	linkedList *linkedListo;
 	linkedListo = createLinkedList();
 	append(linkedListo, 20);
-	pop(linkedListo);
-	append(linkedListo, 10);
-	for (i = 0; i < 5; i++)
-	{
-		append(linkedListo, 10*i);
-	}
-	printLinkedList(linkedListo);
-	delete(linkedListo, 0);
-	printLinkedList(linkedListo);
-	delete(linkedListo, 3);
-	printLinkedList(linkedListo);
+	append(linkedListo, 30);
+	append(linkedListo, 30);
+	insert(linkedListo, 0, 0);
+	insert(linkedListo, 20, 20);
+	insert(linkedListo, 2, 2);
+	insert(linkedListo, 4, 4);
 	removeNode(linkedListo, 0);
-	printLinkedList(linkedListo);
 	removeNode(linkedListo, 20);
-	printLinkedList(linkedListo);
-	removeNode(linkedListo, 40);
+	removeNode(linkedListo, 20);
+	removeNode(linkedListo, 4);
+	pop(linkedListo);
+	append(linkedListo, 20);
+	append(linkedListo, 300);
+	insert(linkedListo, 3, 200);
 	printLinkedList(linkedListo);
 	delete(linkedListo, 0);
+	delete(linkedListo, 1);
+	delete(linkedListo, 1);
 	printLinkedList(linkedListo);
-	append(linkedListo, 20);
-	printLinkedList(linkedListo);
-	pop(linkedListo);
-	printLinkedList(linkedListo);
-	free(linkedListo); 
-	/* Don't forget to free the linked list
-	 * Also don't forget to remove all of the elements from the linked list in order to free the memory from mallocs */
+	free(linkedListo);
 	return 0;
 }
