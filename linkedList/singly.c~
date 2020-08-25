@@ -338,6 +338,6 @@ int main()
 	printLinkedList(linkedListo);
 	free(linkedListo); 
 	/* Don't forget to free the linked list
-	 * Also don't forget to remove all of the elements from the linked list in order to free them */
+	 * Also don't forget to remove all of the elements from the linked list in order to free the memory from mallocs */
 	return 0;
 }

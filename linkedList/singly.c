@@ -6,7 +6,7 @@
 #define DATA(NodePtr) (NodePtr)->data
 #define NEXT(NodePtr) (NodePtr)->next
 
-/* Our methods are
+/* Our functions are
  * print, append, count, index, insert, remove, pop, delete */
 
 /* Structs used below */
