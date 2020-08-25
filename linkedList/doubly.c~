@@ -42,7 +42,7 @@ void delete(linkedList *, int);
 
 node *createNode(int data)
 {
-	node *nodePtr = malloc(sizeof(node)); /* Don't forget to free th    is malloc when removing or deleting nodes */
+	node *nodePtr = malloc(sizeof(node)); /* Don't forget to free this malloc when removing or deleting nodes */
 	DATA(nodePtr) = data;
 	NEXT(nodePtr) = NULL;
 	PREV(nodePtr) = NULL;
@@ -83,7 +83,7 @@ void append(linkedList *linkedListo, int data)
 	node *nodeToAdd;
 	if (LEN(linkedListo) == 0)
 	{
-		/* If the linked list is empty, simply set the head and the tail poi    nters to the new node */
+		/* If the linked list is empty, simply set the head and the tail pointers to the new node */
 		nodeToAdd = createNode(data);
 		HEAD(linkedListo) = nodeToAdd;
 		TAIL(linkedListo) = nodeToAdd;
@@ -91,7 +91,7 @@ void append(linkedList *linkedListo, int data)
 	}
 	else
 	{
-		/* If the linked list already has nodes, set the tail's next to it a    nd set the tail to it */
+		/* If the linked list already has nodes, set the tail's next to it and set the tail to it */
 		nodeToAdd = createNode(data);
 		NEXT(TAIL(linkedListo)) = nodeToAdd;
 		PREV(nodeToAdd) = TAIL(linkedListo);
@@ -111,15 +111,15 @@ int pop(linkedList *linkedListo)
 	}
 	else
 	{
-		valToReturn = DATA(TAIL(linkedListo));
-		if (len == 1)
+		valToReturn = DATA(TAIL(linkedListo)); /* Store the value to be returned */
+		if (len == 1) /* If the linked list has only one node, simply free it and set the pointers of the linked list to null */
 		{
 			free(HEAD(linkedListo));
 			HEAD(linkedListo) = NULL;
 			TAIL(linkedListo) = NULL;
 			LEN(linkedListo)--;
 		}
-		else
+		else /* If the linked list has multiple nodes, do the regular pop */
 		{
 			nodePtr = PREV(TAIL(linkedListo));
 			NEXT(nodePtr) = NULL;
@@ -190,7 +190,7 @@ void insert(linkedList *linkedListo, int index, int data)
 	}
 	else /* Index to insert is between the first and the last node (not included), and the linked list has multiple nodes (because the last 2 cases handle all of the linked lists with one node)*/
 	{
-		if (index <= len/2)
+		if (index <= len/2) /* Move forward from the head if the index to insert is in the first half */
 		{
 			nodePtr = HEAD(linkedListo);
 			for (i = 1; i < index; i++, nodePtr = NEXT(nodePtr));
@@ -202,7 +202,7 @@ void insert(linkedList *linkedListo, int index, int data)
 			PREV(nodePtr2) = nodeToAdd;
 			LEN(linkedListo)++;
 		}
-		else
+		else /* Move backward from the tail if the index to insert is in the second half */
 		{
 			nodePtr = TAIL(linkedListo);
 			for (i = len-1; i > index; i--, nodePtr = PREV(nodePtr));
@@ -221,20 +221,19 @@ void removeNode(linkedList *linkedListo, int data)
 {
 	int len = LEN(linkedListo);
 	node *nodePtr, *nodePtr2;
-	if (len == 0)
+	if (len == 0) /* Check if the linked list is empty */
 	{
-		/* Check if the linked list is empty */
 		printf("Linked list doesn't have any elements\n");
 		return;
 	}
 	else if (len == 1) /* Check if the linked list has only one node */
 	{
-		if (DATA(HEAD(linkedListo)) == data) /* Check if the only node has the value to be removed */
+		if (DATA(HEAD(linkedListo)) == data) /* Check if the only node is the value to be removed */
 		{
 			pop(linkedListo);
 			return;
 		}
-		else /* If the only node doesn't have the value to be removed */
+		else /* If the only node isn't the value to be removed */
 		{
 			printf("The element doesn't exist in the linked list\n");
 			return;
@@ -289,7 +288,7 @@ void delete(linkedList *linkedListo, int index)
 	}
 	else /* The linked list has multiple nodes */
 	{
-		if (index < 0) /* Check for erroneous input, this case index is way below the bounds */
+		if (index < 0) /* Check for erroneous input, this case index is below the bounds */
 		{
 			printf("Index should be 0 or positive\n");
 		}
@@ -305,19 +304,19 @@ void delete(linkedList *linkedListo, int index)
 		{
 			pop(linkedListo);
 		}
-		else if (index >= len) /* Check for erroneous input, this case index is way above the bounds */
+		else if (index >= len) /* Check for erroneous input, this case index is above the bounds */
 		{
 			printf("Index is out of bounds\n");
 		}
 		else /* Removal index is in the middle of the linked list */
 		{
-			if (index < len/2)
+			if (index < len/2) /* If the index is in the first half of the linked list, move forward from the head */
 			{
 				nodePtr = HEAD(linkedListo);
 				for (i = 0; i < index; i++, nodePtr = NEXT(nodePtr));
 
 			}
-			else
+			else /* If the index is in the second half of the linked list, move backward from the tail */
 			{
 				nodePtr = TAIL(linkedListo);
 				for (i = len-1; i > index; i--, nodePtr = PREV(nodePtr));
@@ -357,5 +356,7 @@ int main()
 	delete(linkedListo, 1);
 	printLinkedList(linkedListo);
 	free(linkedListo);
+	/* Don't forget to free the existing linked lists
+	 * Also, don't forget to remove all of the nodes to free the mallocs required for them */
 	return 0;
 }

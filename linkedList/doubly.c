@@ -355,6 +355,8 @@ int main()
 	delete(linkedListo, 1);
 	delete(linkedListo, 1);
 	printLinkedList(linkedListo);
+	pop(linkedListo);
+	pop(linkedListo);
 	free(linkedListo);
 	/* Don't forget to free the existing linked lists
 	 * Also, don't forget to remove all of the nodes to free the mallocs required for them */
