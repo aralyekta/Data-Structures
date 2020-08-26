@@ -49,27 +49,6 @@ class Node:
                 else:
                     self.right.add(data)
 
-    def remove(self, data):
-        if self.count == 0:
-            print("The tree is empty")
-        else:
-            if self.data == data:
-                self.count -= 1
-                if self.count == 0:
-                    if not self.left and not self.right:
-                        return
-
-            elif data < self.data:
-                if self.left:
-                    self.left.remove(data)
-                else:
-                    print("The value doesn't exist in the BST")
-            elif data > self.data:
-                if self.right:
-                    self.right.remove(data)
-                else:
-                    print("The value doesn't exist in the BST")
-
 tree = Node(10)
 tree.add(5)
 tree.add(20)
