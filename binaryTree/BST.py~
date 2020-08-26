@@ -1,0 +1,53 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+        self.count = 1
+
+    def print(self, level = 0):
+        if not self:
+            print("The tree doesn't have any elements")
+        else:
+            print(self.data, end=" ")
+            if self.left:
+                self.left.print(level+1)
+            if self.right:
+                self.right.print(level+1)
+            if level == 0:
+                print("")
+                print("Size:", self.size)
+
+    def isLeaf(self):
+        if not self.left and not self.right:
+            return 1
+        else:
+            return 0
+
+    def isEmpty(self):
+        if not self:
+            return 1
+        else:
+            return 0
+
+    def add(self, data):
+        print("Entered the function for the node", self.data)
+        if not self:
+            self = Node(data)
+        else:
+            if data == self.data:
+                self.count += 1
+            elif data < self.data:
+                if not self.left:
+                    self.left = Node(data)
+                else:
+                    self.left.add(data)
+            elif data > self.data:
+                if not self.right:
+                    self.right = Node(data)
+                else:
+                    self.right.add(data)
+
+tree = Node(10)
+tree.add(5)
+tree.add(20)
